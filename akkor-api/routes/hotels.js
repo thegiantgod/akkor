@@ -1,66 +1,66 @@
 var express = require('express');
 var router = express.Router();
-const users = require('../models/User');
+const hotels = require('../models/Hotel');
 
-/* GET users listing. */
+/* GET hotels listing. */
 router.get('/', async function(req, res, next) {
-  res.json(await users.find());
+  res.json(await hotels.find());
 });
 
-/* GET a user by its id */ 
+/* GET a hotel by its id */ 
 router.get('/:id', async function(req, res, next) {
   try {
-    const value = await users.findById(req.params.id);
+    const value = await hotels.findById(req.params.id);
     res.json(value);
   } catch (error) {
     res.status(404);
-    res.send("There is no user with this id.")
+    res.send("There is no hotel with this id.")
   }
   
 });
 
-/* creates a user */
+/* creates a hotel */
 router.post('/', async function(req, res, next) {
   try {
-    const newUser = await users.create({
+    const newHotel = await hotels.create({
       ...req.body
     });
     res.status(201);
-    res.json(newUser);
+    res.json(newHotel);
   } catch (error) {
     res.status(400);
     res.json(error.errors);
   }
 });
 
-/* deletes an user */
+/* deletes a hotel */
 router.delete('/:id', function (req, res, next) {
   const newId = req.params.id;
-  if (users.findById(newId) !== null) {
+  if (hotels.findById(newId) !== null) {
     
     let query = { _id : newId}
-    users.deleteOne(query, (err, obj) => {
+    hotels.deleteOne(query, (err, obj) => {
       if (err) res.status(500);
     });
-    res.send("This user was succesfully deleted.");
+    res.send("This hotel was succesfully deleted.");
     return;
   }
-  res.status(404).send("Error : there is no user with this id to delete !");
+  res.status(404).send("Error : there is no hotel with this id to delete !");
 });
 
 /* updates an user */
 router.put("/:id", function (req, res, next) {
   
   let query = { _id : req.params.id};
-  if(users.findById(req.params.id) !== null) {
-    users.updateOne(query, req.body, (err, res) => {
+  if(hotels.findById(req.params.id) !== null) {
+    hotels.updateOne(query, req.body, (err, res) => {
       if (err) res.status(500);
     })
     res.status(200);
-    res.send("User updated.");
+    res.send("Hotel updated.");
     return;
   }
-  res.status(404).send("Error : there is no user with this id to update !");
+  res.status(404).send("Error : there is no hotel with this id to update !");
 });
 
 module.exports = router;
