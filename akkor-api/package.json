@@ -3,16 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "test": "set NODE_ENV=test && mocha --timeout 60000",
+    "test-folder": "mocha './test/*.js'"
   },
   "dependencies": {
+    "chai": "^4.3.7",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "mocha": "^10.2.0",
+    "mongodb-memory-server": "^8.11.4",
     "mongoose": "^6.9.1",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
   }
 }
