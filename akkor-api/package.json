@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "set NODE_ENV=test && mocha --timeout 60000",
+    "test": "set NODE_ENV=test && mocha --timeout 6000",
     "test-folder": "mocha './test/*.js'"
   },
   "dependencies": {

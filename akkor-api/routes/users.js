@@ -34,33 +34,41 @@ router.post('/', async function(req, res, next) {
 });
 
 /* deletes an user */
-router.delete('/:id', function (req, res, next) {
+router.delete("/:id", function (req, res, next) {
   const newId = req.params.id;
-  if (users.findById(newId) !== null) {
-    
-    let query = { _id : newId}
-    users.deleteOne(query, (err, obj) => {
-      if (err) res.status(500);
-    });
-    res.send("This user was succesfully deleted.");
-    return;
-  }
-  res.status(404).send("Error : there is no user with this id to delete !");
+  users.findById(newId, (err) => {
+    if (err) {
+      res.status(404).send("Error : there is no user with this id to delete !");
+    } else {
+      let query = { _id : newId}
+      users.deleteOne(query, (err) => {
+        if (err) {
+          res.status(500);
+          return
+        }
+      });
+      res.status(200).send("This user was succesfully deleted.");
+      return;
+    }
+  })
 });
 
 /* updates an user */
 router.put("/:id", function (req, res, next) {
   
   let query = { _id : req.params.id};
-  if(users.findById(req.params.id) !== null) {
-    users.updateOne(query, req.body, (err, res) => {
-      if (err) res.status(500);
-    })
-    res.status(200);
-    res.send("User updated.");
-    return;
-  }
-  res.status(404).send("Error : there is no user with this id to update !");
+  users.findById(req.params.id, (err) => {
+    if (err) {
+      res.status(404).send("Error : there is no user with this id to update !");
+    } else {
+      users.updateOne(query, req.body, (err, res) => {
+        if (err) res.status(500);
+      })
+      res.status(200);
+      res.json("User updated");
+      return;
+    }
+  }) 
 });
 
 module.exports = router;
