@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "set NODE_ENV=test && mocha --timeout 6000",
-    "test-folder": "mocha './test/*.js'"
+    "test": "set NODE_ENV=test && mocha test/test.js --timeout 60000",
+    "test-folder": "mocha './test/*.js'",
+    "swagger-autogen": "node ./swagger/swagger.js"
   },
   "dependencies": {
     "chai": "^4.3.7",
@@ -19,6 +20,7 @@
     "mongoose": "^6.9.1",
     "morgan": "~1.9.1",
     "nodemon": "^2.0.20",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "swagger-autogen": "^2.23.1"
   }
 }

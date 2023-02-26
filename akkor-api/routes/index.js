@@ -3,7 +3,7 @@ var router = express.Router();
 const { connectDB } = require('../dbConnection');
 
 
-connectDB();
+!(process.env.NODE_ENV?.trim() === 'test') && connectDB();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

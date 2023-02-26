@@ -2,6 +2,17 @@ var express = require('express');
 var router = express.Router();
 const bookings = require('../models/Booking');
 
+const bookingExists = async (req, res, next) => {
+  const result = await bookings.findById(req.params.id);
+    if (!result) { 
+      console.log(req.params.id)
+      res.status(404).send("Error : there is no hotel with this id !");
+    } else {
+      next()
+    }
+  
+}
+
 /* GET bookings listing. */
 router.get('/', async function(req, res, next) {
   res.json(await bookings.find());
@@ -34,34 +45,28 @@ router.post('/', async function(req, res, next) {
 });
 
 /* deletes a booking */
-router.delete('/:id', function (req, res, next) {
+router.delete('/:id', bookingExists, function (req, res, next) {
   const newId = req.params.id;
-  if (bookings.findById(newId) !== null) {
-    
-    let query = { _id : newId}
-    bookings.deleteOne(query, (err, obj) => {
-      if (err) res.status(500);
-    });
-    res.send("This booking was succesfully deleted.");
-    return;
-  }
-  res.status(404).send("Error : there is no booking with this id to delete !");
+  let query = { _id : newId}
+  bookings.deleteOne(query, (err, obj) => {
+    if (err) res.status(500);
+  });
+  res.send("This booking was succesfully deleted.");
+  return;
 });
 
 /* updates a booking */
-router.put("/:id", function (req, res, next) {
+router.put("/:id", bookingExists, function (req, res, next) {
   
   let query = { _id : req.params.id};
-  if(bookings.findById(req.params.id) !== null) {
-    bookings.updateOne(query, req.body, (err, res) => {
-      //if (err) res.status(500);
-      return
-    })
-    res.status(200);
-    res.send("Booking updated.");
-    return;
-  }
-  res.status(404).send("Error : there is no booking with this id to update !");
+
+  bookings.updateOne(query, req.body, (err, res) => {
+    //if (err) res.status(500);
+    return
+  })
+  res.status(200);
+  res.send("Booking updated.");
+  return;
 });
 
 module.exports = router;

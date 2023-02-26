@@ -44,7 +44,7 @@ beforeEach(() => {
     return new Promise(resolve => {
         setTimeout(() => {
             resolve()
-        }, 1000)
+        }, 500)
     })
 })
 
@@ -69,6 +69,27 @@ describe("Test user fetching", async () => {
         await supertest(app).get("/users/rgdr").expect(404).then(response => {
             assert.equal(response.text, "There is no user with this id.")
         })   
+    })
+})
+
+describe("Test login", () => {
+    it("Should login the user", async() => {
+        await supertest(app).get("/users/login").send(body).expect(200).then(response => {
+            assert.equal(response.body.email, "test")
+        })
+    })
+
+    it("Should get a 404 error", async() => {
+        const newBody = {email: "tes", password: body.password}
+        await supertest(app).get("/users/login").send(newBody).expect(404).then(response => {
+            assert.equal(response.text, "Error : there is no user with this id !")
+        })
+    })
+
+    it("Should get a 400 error", async() => {
+        await supertest(app).get("/users/login").send(wrongPasswordBody).expect(400).then(response => {
+            assert.equal(response.text, "Incorrect email or password !")
+        })
     })
 })
 
@@ -102,7 +123,8 @@ describe("Test user update", () => {
     })
 
     it("Should get an error", async() => {
-        await supertest(app).put(`/users/esgsg`).send(email).expect(404).then(response => {
+        await supertest(app).put(`/users/esgsg/`).send(email).expect(404).then(response => {
+            console.log(response)
             assert.equal(response.text, "Error : there is no user with this id to update !")
         })
     })
@@ -110,13 +132,13 @@ describe("Test user update", () => {
 
 describe("Test user delete", () => {
     it("Should delete the user", async () => {
-        await supertest(app).delete(`/users/${user._id}`).expect(200).then(response => {
+        await supertest(app).delete(`/users/${user._id}/`).expect(200).then(response => {
             assert.equal(response.text, "This user was succesfully deleted.")
         })
     })
 
     it("Should get a 404 error", async () => {
-        await supertest(app).delete(`/users/drhrhdr`).expect(404).then(response => {
+        await supertest(app).delete(`/users/drhrhdr/`).expect(404).then(response => {
             assert.equal(response.text, "Error : there is no user with this id to delete !")
         })
     })
