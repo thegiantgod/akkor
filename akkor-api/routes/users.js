@@ -85,7 +85,7 @@ router.delete("/:id",userExists, function (req, res, next) {
 });
 
 /* updates an user */
-router.put("/:id", common.isAdmin, userExists, function (req, res, next) {
+router.put("/:id", userExists, function (req, res, next) {
   
   let query = { _id : req.params.id};
   users.updateOne(query, req.body, (err, res) => {

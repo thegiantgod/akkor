@@ -1,7 +1,6 @@
 const assert = require('assert').strict;
 const supertest = require("supertest")
 const app = require('../app.js').app;
-const { connectDB, disconnectDB } = require('../dbConnection.js');
 
 let body = {
     name: "test",
@@ -14,14 +13,14 @@ let hotel = null
 
 before("Setting up DB connection", () => {
     return new Promise((resolve) => {
-        setTimeout(() => {
-            connectDB().then(async () => {
+        setTimeout( () => {
             
-                await supertest(app).post("/hotels/").send(body).expect(201).then(response => {
+            
+                supertest(app).post("/hotels/").send(body).expect(201).then(response => {
                     hotel = response.body
                 })
                 resolve()
-            })
+            
         }, 500);
     }
     );
@@ -34,10 +33,6 @@ beforeEach(() => {
         }, 500)
     })
 })
-
-after(() => {
-  disconnectDB()
-});
 
 describe("Test hotel fetching", async () => {
     it("Should fetch all hotels", async() => {

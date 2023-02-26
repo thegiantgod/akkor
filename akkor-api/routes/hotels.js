@@ -5,7 +5,6 @@ const hotels = require('../models/Hotel');
 const hotelExists = async (req, res, next) => {
   const result = await hotels.findById(req.params.id);
     if (!result) { 
-      console.log(req.params.id)
       res.status(404).send("Error : there is no hotel with this id !");
     } else {
       next()
@@ -70,4 +69,4 @@ router.put("/:id", hotelExists, function (req, res, next) {
   return;
 });
 
-module.exports = router;
+module.exports =   { router, hotelExists };

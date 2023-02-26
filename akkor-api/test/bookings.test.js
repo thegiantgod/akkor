@@ -1,7 +1,6 @@
 const assert = require('assert').strict;
 const supertest = require("supertest")
 const app = require('../app.js').app;
-const { connectDB, disconnectDB } = require('../dbConnection.js');
 
 let body = {
     hotelId: "test",
@@ -31,23 +30,23 @@ let user = null
 before("Setting up DB connection", () => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            connectDB().then(async () => {
+
             
-                await supertest(app).post("/hotels/").send(hotelBody).expect(201).then(response => {
-                    hotel = response.body;
-                    body.hotelId = hotel._id;
-                })
-
-                await supertest(app).post("/users/").send(userBody).expect(201).then(response => {
-                    user = response.body
-                    body.userId = user._id
-                })
-
-                await supertest(app).post("/bookings/").send(body).expect(201).then(response => {
-                    booking = response.body
-                })
-                resolve()
+            supertest(app).post("/hotels/").send(hotelBody).expect(201).then(response => {
+                hotel = response.body;
+                body.hotelId = hotel._id;
             })
+
+            supertest(app).post("/users/").send(userBody).expect(201).then(response => {
+                user = response.body
+                body.userId = user._id
+            })
+
+            supertest(app).post("/bookings/").send(body).expect(201).then(response => {
+                booking = response.body
+            })
+            resolve()
+            
         }, 500);
     }
     );
@@ -60,10 +59,6 @@ beforeEach(() => {
         }, 500)
     })
 })
-
-after(() => {
-  disconnectDB()
-});
 
 describe("Test booking fetching", async () => {
     it("Should fetch all bookings", async() => {
@@ -91,6 +86,31 @@ describe("Test booking creation", () => {
             assert.equal(response.body.to, Date.now())
         })
     })
+
+    it("Should get a 400 error", async() => {
+        const newBody = {
+            hotelId: body.hotelId,
+            from: body.from,
+            to: body.to,
+            userId: "idd"
+        }
+        await supertest(app).post("/bookings/").send(newBody).expect(400).then(response => {
+            assert.equal(response.text, "Error : this user doesn't exists")
+        })
+    })
+
+    it("Should get a 400 error", async() => {
+        const newBody = {
+            hotelId: "egssg",
+            from: body.from,
+            to: body.to,
+            userId: body.userId
+        }
+        await supertest(app).post("/bookings/").send(newBody).expect(400).then(response => {
+            assert.equal(response.text, "Error : this hotel doesn't exists")
+        })
+    })
+
 })
 
 describe("Test booking update", () => {

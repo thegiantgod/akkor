@@ -1,16 +1,30 @@
 var express = require('express');
 var router = express.Router();
 const bookings = require('../models/Booking');
+const users = require('../models/User');
+const hotels = require('../models/Hotel');
+
 
 const bookingExists = async (req, res, next) => {
   const result = await bookings.findById(req.params.id);
     if (!result) { 
-      console.log(req.params.id)
       res.status(404).send("Error : there is no hotel with this id !");
     } else {
       next()
     }
   
+}
+
+const userAndHotelExists = async (req, res, next) => {
+  const user = await users.findById(req.body.userId)
+  const hotel = await hotels.findById(req.body.hotelId)
+  if (!user) {
+    res.status(400).send("Error : this user doesn't exists")
+  }
+  if (!hotel) {
+    res.status(400).send("Error : this hotel doesn't exists")
+  }
+  next()
 }
 
 /* GET bookings listing. */
@@ -31,7 +45,7 @@ router.get('/:id', async function(req, res, next) {
 });
 
 /* creates a booking */
-router.post('/', async function(req, res, next) {
+router.post('/', userAndHotelExists, async function(req, res, next) {
   try {
     const newBooking = await bookings.create({
       ...req.body
@@ -56,7 +70,7 @@ router.delete('/:id', bookingExists, function (req, res, next) {
 });
 
 /* updates a booking */
-router.put("/:id", bookingExists, function (req, res, next) {
+router.put("/:id", userAndHotelExists, bookingExists, function (req, res, next) {
   
   let query = { _id : req.params.id};
 

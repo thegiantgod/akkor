@@ -1,7 +1,6 @@
 const assert = require('assert').strict;
 const supertest = require("supertest")
 const app = require('../app.js').app;
-const { connectDB, disconnectDB } = require('../dbConnection.js');
 
 let body = {
     email: "test",
@@ -28,16 +27,15 @@ let user = null
 before("Setting up DB connection", () => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            connectDB().then(async () => {
             
-                await supertest(app).post("/users/").send(body).expect(201).then(response => {
-                    user = response.body
-                })
-                resolve()
+            supertest(app).post("/users/").send(body).expect(201).then(response => {
+                user = response.body
             })
+            resolve()
+        })
         }, 500);
-    }
-    );
+    
+    
 });
 
 beforeEach(() => {
@@ -47,10 +45,6 @@ beforeEach(() => {
         }, 500)
     })
 })
-
-after(() => {
-  disconnectDB()
-});
 
 describe("Test user fetching", async () => {
     it("Should fetch all users", async() => {
