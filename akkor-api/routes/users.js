@@ -2,6 +2,11 @@ var express = require('express');
 var router = express.Router();
 const users = require('../models/User');
 const common = require('./commonFunctions');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
+// get config vars
+dotenv.config();
 
 const userExists = async (req, res, next) => {
   const result = await users.findById(req.params.id);
@@ -13,6 +18,27 @@ const userExists = async (req, res, next) => {
   
 }
 
+const generateAccessToken = (email) => {
+  return jwt.sign({email: email}, process.env.TOKEN_SECRET, { expiresIn: '1800' });
+}
+
+const authentificateToken = (req, res, next) => {
+  const authHeader = req.headers['token']
+  const token = authHeader && authHeader.split(' ')[1]
+
+  if (token === null) return res.sendStatus(401)
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    console.log(err)
+
+    if (err) return res.sendStatus(403)
+
+    req.user = user
+
+    next()
+  })
+}
+
 /* GET Logins user */
 router.get('/login', async function(req, res, next) {
   const { email, password } = req.body
@@ -22,7 +48,9 @@ router.get('/login', async function(req, res, next) {
     if(element.password === password) {
         //if login informations a good, it will send back the correct user
         res.status(200);
+        res.set('token', generateAccessToken(element.email))
         res.json(element)
+        res.send()
         return
     } else {
       res.status(400).send("Incorrect email or password !")
@@ -37,7 +65,7 @@ router.get('/login', async function(req, res, next) {
 })
 
 /* GET users listing. */
-router.get('/', async function(req, res, next) {
+router.get('/', authentificateToken, async function(req, res, next) {
   res.json(await users.find());
 });
 
