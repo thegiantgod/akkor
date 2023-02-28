@@ -8,7 +8,7 @@ const hotels = require('../models/Hotel');
 const bookingExists = async (req, res, next) => {
   const result = await bookings.findById(req.params.id);
     if (!result) { 
-      res.status(404).send("Error : there is no hotel with this id !");
+      res.status(404).send("Error : there is no booking with this id !");
     } else {
       next()
     }
@@ -70,7 +70,7 @@ router.delete('/:id', bookingExists, function (req, res, next) {
 });
 
 /* updates a booking */
-router.put("/:id", userAndHotelExists, bookingExists, function (req, res, next) {
+router.put("/:id", bookingExists, function (req, res, next) {
   
   let query = { _id : req.params.id};
 

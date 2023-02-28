@@ -66,7 +66,7 @@ describe("Test hotel update", () => {
     const name = {name: "updated !"}
     it("Should update a hotel name only", async() => {
         await supertest(app).put(`/hotels/${hotel._id}/`).send(name).expect(200).then(response => {
-            assert.equal(response.body, "Hotel updated")
+            assert.equal(response.text, "Hotel updated.")
         })
     })
 

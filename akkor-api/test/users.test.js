@@ -116,11 +116,11 @@ describe("Test user update", () => {
         })
     })
 
-    it("Should get an error", async() => {
-        await supertest(app).put(`/users/esgsg/`).send(email).expect(404).then(response => {
+    it("Should get an error", async(done) => {
+        await supertest(app).put(`/users/esgsg/`).expect(404).then(response => {
             console.log(response)
             assert.equal(response.text, "Error : there is no user with this id to update !")
-        })
+        }).catch(done)
     })
 })
 

@@ -62,11 +62,10 @@ router.put("/:id", hotelExists, function (req, res, next) {
   let query = { _id : req.params.id};
 
   hotels.updateOne(query, req.body, (err, res) => {
-    if (err) res.status(500);
+    if (err) res.status(500).send("Error");
   })
   res.status(200);
   res.send("Hotel updated.");
-  return;
 });
 
 module.exports =   { router, hotelExists };
