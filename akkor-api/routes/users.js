@@ -19,24 +19,7 @@ const userExists = async (req, res, next) => {
 }
 
 const generateAccessToken = (email) => {
-  return jwt.sign({email: email}, process.env.TOKEN_SECRET, { expiresIn: '1800' });
-}
-
-const authentificateToken = (req, res, next) => {
-  const authHeader = req.headers['token']
-  const token = authHeader && authHeader.split(' ')[1]
-
-  if (token === null) return res.sendStatus(401)
-
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    console.log(err)
-
-    if (err) return res.sendStatus(403)
-
-    req.user = user
-
-    next()
-  })
+  return jwt.sign({email: email}, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
 }
 
 /* GET Logins user */
@@ -65,12 +48,12 @@ router.get('/login', async function(req, res, next) {
 })
 
 /* GET users listing. */
-router.get('/', authentificateToken, async function(req, res, next) {
+router.get('/', common.authentificateToken, async function(req, res, next) {
   res.json(await users.find());
 });
 
 /* GET a user by its id */ 
-router.get('/:id', async function(req, res, next) {
+router.get('/:id', common.authentificateToken, async function(req, res, next) {
   try {
     const value = await users.findById(req.params.id);
     res.json(value);
@@ -96,7 +79,7 @@ router.post('/', async function(req, res, next) {
 });
 
 /* deletes an user */
-router.delete("/:id",userExists, function (req, res, next) {
+router.delete("/:id", common.authentificateToken, userExists, function (req, res, next) {
   const newId = req.params.id;
 
   let query = { _id : newId}
@@ -113,7 +96,7 @@ router.delete("/:id",userExists, function (req, res, next) {
 });
 
 /* updates an user */
-router.put("/:id", userExists, function (req, res, next) {
+router.put("/:id", common.authentificateToken, userExists, function (req, res, next) {
   
   let query = { _id : req.params.id};
   users.updateOne(query, req.body, (err, res) => {
