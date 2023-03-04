@@ -1,11 +1,15 @@
 
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+// get config vars
+dotenv.config();
 
 const { MongoMemoryServer } = require('mongodb-memory-server');
 let mongod = null;
 
     const connectDB = async () => {
-        let dbUrl = "mongodb+srv://adminUser:adminUser@akkor.mqfuhxy.mongodb.net/Akkor";
+        let dbUrl = process.env.DATABASE_CONNECTION_URL;
     if (process.env.NODE_ENV?.trim() === 'test') {
         console.log("TEST ! \n")
         mongod = await MongoMemoryServer.create();

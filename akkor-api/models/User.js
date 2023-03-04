@@ -7,6 +7,7 @@ const PASSWORD_MIN_LENGTH = 10
 const UserSchema = new mongoose.Schema({
     "email": {
         type: String,
+        unique: true,
         /*validate : {
             validator: (value) => {
                 return /([A-Za-z0-9]*)@([A-Za-z0-9]*)\.([A-Za-z0-9]{1,5})/.test(value);
