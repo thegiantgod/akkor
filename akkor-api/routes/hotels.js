@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const common = require('./commonFunctions');
 const hotels = require('../models/Hotel');
 
 const hotelExists = async (req, res, next) => {
@@ -30,7 +31,7 @@ router.get('/:id', async function(req, res, next) {
 });
 
 /* creates a hotel */
-router.post('/', async function(req, res, next) {
+router.post('/', common.authentificateToken, async function(req, res, next) {
   try {
     const newHotel = await hotels.create({
       ...req.body
@@ -44,7 +45,7 @@ router.post('/', async function(req, res, next) {
 });
 
 /* deletes a hotel */
-router.delete('/:id', hotelExists, function (req, res, next) {
+router.delete('/:id', common.authentificateToken, hotelExists, function (req, res, next) {
   const newId = req.params.id;
 
   let query = { _id : newId}
@@ -57,7 +58,7 @@ router.delete('/:id', hotelExists, function (req, res, next) {
 });
 
 /* updates a hotel */
-router.put("/:id", hotelExists, function (req, res, next) {
+router.put("/:id", common.authentificateToken, hotelExists, function (req, res, next) {
   
   let query = { _id : req.params.id};
 

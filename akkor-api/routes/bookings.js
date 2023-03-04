@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const bookings = require('../models/Booking');
+const common = require('./commonFunctions');
 const users = require('../models/User');
 const hotels = require('../models/Hotel');
 
@@ -45,7 +46,7 @@ router.get('/:id', async function(req, res, next) {
 });
 
 /* creates a booking */
-router.post('/', userAndHotelExists, async function(req, res, next) {
+router.post('/', common.authentificateToken, userAndHotelExists, async function(req, res, next) {
   try {
     const newBooking = await bookings.create({
       ...req.body
@@ -59,7 +60,7 @@ router.post('/', userAndHotelExists, async function(req, res, next) {
 });
 
 /* deletes a booking */
-router.delete('/:id', bookingExists, function (req, res, next) {
+router.delete('/:id', common.authentificateToken, bookingExists, function (req, res, next) {
   const newId = req.params.id;
   let query = { _id : newId}
   bookings.deleteOne(query, (err, obj) => {
@@ -70,7 +71,7 @@ router.delete('/:id', bookingExists, function (req, res, next) {
 });
 
 /* updates a booking */
-router.put("/:id", bookingExists, function (req, res, next) {
+router.put("/:id", common.authentificateToken, bookingExists, function (req, res, next) {
   
   let query = { _id : req.params.id};
 

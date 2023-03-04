@@ -1,10 +1,10 @@
 {
   "name": "akkor-api",
-  "version": "0.0.0",
+  "version": "0.4.0",
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "set NODE_ENV=test && mocha test/test.js --timeout 10000",
+    "test": "set NODE_ENV=test && mocha test/test.js --timeout 5000",
     "test-folder": "mocha './test/*.js'",
     "swagger-autogen": "node ./swagger/swagger.js"
   },

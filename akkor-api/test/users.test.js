@@ -24,6 +24,7 @@ let wrongPseudoBody = {
 }
 let user = null
 let token = null
+const expiredToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QiLCJpYXQiOjE2Nzc2ODg3MjksImV4cCI6MTY3NzY5MDUyOX0.1cZJi-wx-vjVAoXZi8gCl5Rc6p0arBhsL5naurKAv3U"
 
 before("Setting up DB connection", () => {
     return new Promise((resolve) => {
@@ -62,13 +63,13 @@ describe("Test user fetching", async () => {
     it("Should get the created user", async () => {
         await supertest(app).get(`/users/${user._id}`).set('token', token).expect(200).then(response => {
             assert.equal(response.body.email, "test")
-        })      
+        })
     })
 
     it("Should get a 404 error", async () => {
         await supertest(app).get("/users/rgdr").set('token', token).expect(404).then(response => {
             assert.equal(response.text, "There is no user with this id.")
-        })   
+        })
     })
 })
 
@@ -95,19 +96,26 @@ describe("Test login", () => {
 
 describe("Test user creation", () => {
     it("Should create a user", async() => {
-        await supertest(app).post("/users/").set('token', token).send(body).expect(201).then(response => {
-            assert.equal(response.body.email, "test")
+        body.email += "1"
+        await supertest(app).post("/users/").send(body).expect(201).then(response => {
+            assert.equal(response.body.email, "test1")
+        })
+    })
+
+    it("Should get an error due to duplicate email", async() => {
+        await supertest(app).post("/users/").send(body).expect(400).then(response => {
+            assert.equal(response.text, "")
         })
     })
 
     it("Should get an error due to wrong password", async() => {
-        await supertest(app).post("/users/").set('token', token).send(wrongPasswordBody).expect(400).then(response => {
+        await supertest(app).post("/users/").send(wrongPasswordBody).expect(400).then(response => {
             assert.equal(response.body.password.message, "Your password must be at least 10 characters")
         }) 
     })
 
     it("Should get an error due to wrong pseudo", async() => {
-        await supertest(app).post("/users/").set('token', token).send(wrongPseudoBody).expect(400).then(response => {
+        await supertest(app).post("/users/").send(wrongPseudoBody).expect(400).then(response => {
             assert.equal(response.body.pseudo.message, "Your pseudo must be at least 3 characters")
         })
         
@@ -119,6 +127,18 @@ describe("Test user update", () => {
     it("Should update a user email only", async() => {
         await supertest(app).put(`/users/${user._id}/`).set('token', token).send(email).expect(200).then(response => {
             assert.equal(response.body, "User updated")
+        })
+    })
+
+    it("Should get a 403 error", async () => {
+        await supertest(app).put(`/users/${user._id}/`).set('token', expiredToken).expect(403).then(response => {
+            assert.equal(response.text, "Forbidden")
+        })
+    })
+
+    it("Should get a 401 error", async () => {
+        await supertest(app).put(`/users/${user._id}/`).expect(401).then(response => {
+            assert.equal(response.text, "")
         })
     })
 
@@ -137,12 +157,23 @@ describe("Test user delete", () => {
         })
     })
 
+    it("Should get a 403 error", async () => {
+        await supertest(app).delete(`/users/${user._id}/`).set('token', expiredToken).expect(403).then(response => {
+            assert.equal(response.text, "Forbidden")
+        })
+    })
+
+    it("Should get a 401 error", async () => {
+        await supertest(app).delete(`/users/${user._id}/`).expect(401).then(response => {
+            assert.equal(response.text, "")
+        })
+    })
+
     it("Should get a 404 error", async () => {
         await supertest(app).delete(`/users/drhrhdr/`).set('token', token).expect(404).then(response => {
             assert.equal(response.text, "Error : there is no user with this id to delete !")
         })
     })
-
 
 
 })
