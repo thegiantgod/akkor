@@ -15,11 +15,13 @@ const hotelExists = async (req, res, next) => {
 
 /* GET hotels listing. */
 router.get('/', async function(req, res, next) {
+  // #swagger.tags = ['Hotel managing']
   res.json(await hotels.find());
 });
 
 /* GET a hotel by its id */ 
 router.get('/:id', async function(req, res, next) {
+  // #swagger.tags = ['Hotel managing']
   try {
     const value = await hotels.findById(req.params.id);
     res.json(value);
@@ -31,7 +33,22 @@ router.get('/:id', async function(req, res, next) {
 });
 
 /* creates a hotel */
-router.post('/', common.authentificateToken, async function(req, res, next) {
+router.post('/', common.authentificateToken, common.isAdmin, async function(req, res, next) {
+  // #swagger.tags = ['Hotel managing']
+  /* #swagger.parameters['hotel'] = {
+        in: 'body',
+        description: 'All of the body below.',
+        required: true,
+        type: 'object',
+        format: 'json',
+        schema: {
+          name: "HotelName",
+          location: "Paris",
+          description: "Just a hotel",
+          pictureList: ["blob1", "blob2"]
+        }
+  } */
+
   try {
     const newHotel = await hotels.create({
       ...req.body
@@ -45,7 +62,8 @@ router.post('/', common.authentificateToken, async function(req, res, next) {
 });
 
 /* deletes a hotel */
-router.delete('/:id', common.authentificateToken, hotelExists, function (req, res, next) {
+router.delete('/:id', common.authentificateToken, common.isAdmin, hotelExists, function (req, res, next) {
+  // #swagger.tags = ['Hotel managing']
   const newId = req.params.id;
 
   let query = { _id : newId}
@@ -58,8 +76,22 @@ router.delete('/:id', common.authentificateToken, hotelExists, function (req, re
 });
 
 /* updates a hotel */
-router.put("/:id", common.authentificateToken, hotelExists, function (req, res, next) {
-  
+router.put("/:id", common.authentificateToken, common.isAdmin, hotelExists, function (req, res, next) {
+  // #swagger.tags = ['Hotel managing']
+  /* #swagger.parameters['hotel'] = {
+        in: 'body',
+        description: 'at least one of the variables in the body (ex : if you only want to update the name, you can just send the name in the body).',
+        required: true,
+        type: 'object',
+        format: 'json',
+        schema: {
+          name: "HotelName",
+          location: "Paris",
+          description: "Just a hotel",
+          pictureList: ["blob1", "blob2"]
+        }
+  } */
+
   let query = { _id : req.params.id};
 
   hotels.updateOne(query, req.body, (err, res) => {

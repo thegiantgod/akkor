@@ -33,7 +33,7 @@ before("Setting up DB connection", () => {
                 user = response.body
             })
 
-            await supertest(app).get('/users/login').send(body).expect(200).then(response => {
+            await supertest(app).post('/users/login').send(body).expect(200).then(response => {
                 token = response.headers['token']
                 console.log(token)
             })
@@ -75,20 +75,20 @@ describe("Test user fetching", async () => {
 
 describe("Test login", () => {
     it("Should login the user", async() => {
-        await supertest(app).get("/users/login").send(body).expect(200).then(response => {
+        await supertest(app).post("/users/login").send(body).expect(200).then(response => {
             assert.equal(response.body.email, "test")
         })
     })
 
     it("Should get a 404 error", async() => {
         const newBody = {email: "tes", password: body.password}
-        await supertest(app).get("/users/login").send(newBody).expect(404).then(response => {
+        await supertest(app).post("/users/login").send(newBody).expect(404).then(response => {
             assert.equal(response.text, "Error : there is no user with this id !")
         })
     })
 
     it("Should get a 400 error", async() => {
-        await supertest(app).get("/users/login").send(wrongPasswordBody).expect(400).then(response => {
+        await supertest(app).post("/users/login").send(wrongPasswordBody).expect(400).then(response => {
             assert.equal(response.text, "Incorrect email or password !")
         })
     })

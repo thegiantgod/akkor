@@ -11,17 +11,34 @@
     "http"
   ],
   "paths": {
-    "/": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
     "/users/login": {
-      "get": {
+      "post": {
+        "tags": [
+          "User managing"
+        ],
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "email and password",
+            "required": true,
+            "format": "json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "MyPasswordOk!"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -37,6 +54,9 @@
     },
     "/users/": {
       "get": {
+        "tags": [
+          "User managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -58,8 +78,40 @@
         }
       },
       "post": {
+        "tags": [
+          "User managing"
+        ],
         "description": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "all of the below body",
+            "required": true,
+            "format": "json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                },
+                "pseudo": {
+                  "type": "string",
+                  "example": "MyPseudo"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "MyPasswordOk!"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "admin"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -75,6 +127,9 @@
     },
     "/users/{id}": {
       "get": {
+        "tags": [
+          "User managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -105,6 +160,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "User managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -138,6 +196,9 @@
         }
       },
       "put": {
+        "tags": [
+          "User managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -150,6 +211,34 @@
             "name": "token",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "user",
+            "in": "body",
+            "description": "at least one of the variables in the body (ex : if you only want to update the role, you can just send the role in the body).",
+            "required": true,
+            "format": "json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "test@gmail.com"
+                },
+                "pseudo": {
+                  "type": "string",
+                  "example": "MyPseudo"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "MyPasswordOk!"
+                },
+                "role": {
+                  "type": "string",
+                  "example": "admin"
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -173,6 +262,9 @@
     },
     "/hotels/": {
       "get": {
+        "tags": [
+          "Hotel managing"
+        ],
         "description": "",
         "parameters": [],
         "responses": {
@@ -182,12 +274,54 @@
         }
       },
       "post": {
+        "tags": [
+          "Hotel managing"
+        ],
         "description": "",
         "parameters": [
           {
             "name": "token",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "role",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "hotel",
+            "in": "body",
+            "description": "All of the body below.",
+            "required": true,
+            "format": "json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "HotelName"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "Paris"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Just a hotel"
+                },
+                "pictureList": {
+                  "type": "array",
+                  "example": [
+                    "blob1",
+                    "blob2"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -211,6 +345,9 @@
     },
     "/hotels/{id}": {
       "get": {
+        "tags": [
+          "Hotel managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -230,6 +367,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Hotel managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -240,6 +380,11 @@
           },
           {
             "name": "token",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "role",
             "in": "header",
             "type": "string"
           }
@@ -263,6 +408,9 @@
         }
       },
       "put": {
+        "tags": [
+          "Hotel managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -275,6 +423,45 @@
             "name": "token",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "role",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "hotel",
+            "in": "body",
+            "description": "at least one of the variables in the body (ex : if you only want to update the name, you can just send the name in the body).",
+            "required": true,
+            "format": "json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "HotelName"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "Paris"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Just a hotel"
+                },
+                "pictureList": {
+                  "type": "array",
+                  "example": [
+                    "blob1",
+                    "blob2"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -298,6 +485,9 @@
     },
     "/bookings/": {
       "get": {
+        "tags": [
+          "User managing"
+        ],
         "description": "",
         "parameters": [],
         "responses": {
@@ -307,6 +497,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Booking managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -315,16 +508,29 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "booking",
             "in": "body",
+            "description": "All of the body below.",
+            "required": true,
+            "format": "json",
             "schema": {
               "type": "object",
               "properties": {
-                "userId": {
-                  "example": "any"
+                "hotelID": {
+                  "type": "string",
+                  "example": "g5sg4sh4s9g4s9"
                 },
-                "hotelId": {
-                  "example": "any"
+                "from": {
+                  "type": "string",
+                  "example": "02/08/2023"
+                },
+                "to": {
+                  "type": "string",
+                  "example": "02/09/2023"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "dh4h64dh4d6"
                 }
               }
             }
@@ -351,6 +557,9 @@
     },
     "/bookings/{id}": {
       "get": {
+        "tags": [
+          "Booking managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -370,6 +579,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Booking managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -403,6 +615,9 @@
         }
       },
       "put": {
+        "tags": [
+          "Booking managing"
+        ],
         "description": "",
         "parameters": [
           {
@@ -415,6 +630,34 @@
             "name": "token",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "booking",
+            "in": "body",
+            "description": "at least one of the variables in the body (ex : if you only want to update from, you can just send from in the body).",
+            "required": true,
+            "format": "json",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hotelID": {
+                  "type": "string",
+                  "example": "g5sg4sh4s9g4s9"
+                },
+                "from": {
+                  "type": "string",
+                  "example": "02/08/2023"
+                },
+                "to": {
+                  "type": "string",
+                  "example": "02/09/2023"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "dh4h64dh4d6"
+                }
+              }
+            }
           }
         ],
         "responses": {

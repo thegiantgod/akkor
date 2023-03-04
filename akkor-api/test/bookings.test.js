@@ -38,12 +38,12 @@ before("Setting up DB connection", () => {
                 body.userId = user._id
             })
 
-            await supertest(app).get('/users/login').send(userBody).expect(200).then(response => {
+            await supertest(app).post('/users/login').send(userBody).expect(200).then(response => {
                 token = response.headers['token']
                 console.log(token)
             })
             
-            await supertest(app).post("/hotels/").set('token', token).send(hotelBody).expect(201).then(response => {
+            await supertest(app).post("/hotels/").set('token', token).set('role', "admin").send(hotelBody).expect(201).then(response => {
                 hotel = response.body;
                 body.hotelId = hotel._id;
             })

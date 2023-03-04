@@ -9,6 +9,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users').router;
 var hotelsRouter = require('./routes/hotels').router;
 var bookingsRouter = require('./routes/bookings');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger/swagger-output.json');
 
 var app = express();
 
@@ -30,6 +32,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/hotels', hotelsRouter);
 app.use('/bookings', bookingsRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
