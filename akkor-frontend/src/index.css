@@ -22,18 +22,13 @@ body {
   }
   
   .navbar-brand{
-    color: white !important;
+    color: white ;
   }
   
   .navbar-nav{
     margin-left: auto;
     
   }
-
-  .navbar .brand {
-    margin-left: 350px;
-  }
-  
   
   .register{
     max-width: 970px;
@@ -78,4 +73,33 @@ body {
     color: white;
   }
 
+  .reservation-form h2 {
+    margin-top: 30px;
+  }
+
+  .reservation-form {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 30%;
+    height: 50vh;
+    border-radius: 5px;
+    color: black; 
+    background: linear-gradient(to right, #f3a408, #e6670c);
+  }
+
+  .reservation-form input {
+    margin-top: 20px;
+    
+  }
+
+  .reservation-form .flex-space {
+    margin-right: 20px;
+    
+  }
+
   
+
+  
+
+ 
