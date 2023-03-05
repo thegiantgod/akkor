@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const bookings = require('../models/Booking');
+const common = require('./commonFunctions');
 const users = require('../models/User');
 const hotels = require('../models/Hotel');
 
@@ -8,7 +9,7 @@ const hotels = require('../models/Hotel');
 const bookingExists = async (req, res, next) => {
   const result = await bookings.findById(req.params.id);
     if (!result) { 
-      res.status(404).send("Error : there is no hotel with this id !");
+      res.status(404).send("Error : there is no booking with this id !");
     } else {
       next()
     }
@@ -29,11 +30,13 @@ const userAndHotelExists = async (req, res, next) => {
 
 /* GET bookings listing. */
 router.get('/', async function(req, res, next) {
+  // #swagger.tags = ['User managing']
   res.json(await bookings.find());
 });
 
 /* GET a booking by its id */ 
 router.get('/:id', async function(req, res, next) {
+  // #swagger.tags = ['Booking managing']
   try {
     const value = await bookings.findById(req.params.id);
     res.json(value);
@@ -45,7 +48,22 @@ router.get('/:id', async function(req, res, next) {
 });
 
 /* creates a booking */
-router.post('/', userAndHotelExists, async function(req, res, next) {
+router.post('/', common.authentificateToken, userAndHotelExists, async function(req, res, next) {
+  // #swagger.tags = ['Booking managing']
+  /* #swagger.parameters['booking'] = {
+        in: 'body',
+        description: 'All of the body below.',
+        required: true,
+        type: 'object',
+        format: 'json',
+        schema: {
+          hotelID: "g5sg4sh4s9g4s9",
+          from: "02/08/2023",
+          to: "02/09/2023",
+          userId: "dh4h64dh4d6"
+        }
+  } */
+
   try {
     const newBooking = await bookings.create({
       ...req.body
@@ -59,7 +77,8 @@ router.post('/', userAndHotelExists, async function(req, res, next) {
 });
 
 /* deletes a booking */
-router.delete('/:id', bookingExists, function (req, res, next) {
+router.delete('/:id', common.authentificateToken, bookingExists, function (req, res, next) {
+  // #swagger.tags = ['Booking managing']
   const newId = req.params.id;
   let query = { _id : newId}
   bookings.deleteOne(query, (err, obj) => {
@@ -70,8 +89,22 @@ router.delete('/:id', bookingExists, function (req, res, next) {
 });
 
 /* updates a booking */
-router.put("/:id", userAndHotelExists, bookingExists, function (req, res, next) {
-  
+router.put("/:id", common.authentificateToken, bookingExists, function (req, res, next) {
+  // #swagger.tags = ['Booking managing']
+  /* #swagger.parameters['booking'] = {
+        in: 'body',
+        description: 'at least one of the variables in the body (ex : if you only want to update from, you can just send from in the body).',
+        required: true,
+        type: 'object',
+        format: 'json',
+        schema: {
+          hotelID: "g5sg4sh4s9g4s9",
+          from: "02/08/2023",
+          to: "02/09/2023",
+          userId: "dh4h64dh4d6"
+        }
+  } */
+
   let query = { _id : req.params.id};
 
   bookings.updateOne(query, req.body, (err, res) => {
