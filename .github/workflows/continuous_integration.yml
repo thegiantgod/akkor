@@ -9,15 +9,15 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./app
+        working-directory: ./akkor-api
     steps:
-      - run: ls
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18.x
           cache: 'npm'
           cache-dependency-path: akkor-api/package-lock.json
+      - run: ls
       - run: npm install
       - run: npm test
       
