@@ -10,11 +10,12 @@ jobs:
     steps:
 
       - uses: actions/checkout@v3
-      - run: cd ./akkor-api
       - uses: actions/setup-node@v3
         with:
           node-version: 18.x
           cache: 'npm'
+          cache-dependency-path: akkor-api/package-lock.json
+      - run: cd ./akkor-api/
       - run: npm install
       - run: npm test
       
