@@ -16,6 +16,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: akkor-api/package-lock.json
       - run: cd ./akkor-api/
+      - run: ls
       - run: npm install
       - run: npm test
       
