@@ -7,10 +7,12 @@ jobs:
   test-api:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./app
     steps:
-
+      - run: ls
       - uses: actions/checkout@v3
-      - working-directory: ./app
       - uses: actions/setup-node@v3
         with:
           node-version: 18.x
