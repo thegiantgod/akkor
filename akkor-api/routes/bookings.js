@@ -30,7 +30,7 @@ const userAndHotelExists = async (req, res, next) => {
 
 /* GET bookings listing. */
 router.get('/', async function(req, res, next) {
-  // #swagger.tags = ['User managing']
+  // #swagger.tags = ['Booking managing']
   res.json(await bookings.find());
 });
 

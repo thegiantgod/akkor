@@ -486,7 +486,7 @@
     "/bookings/": {
       "get": {
         "tags": [
-          "User managing"
+          "Booking managing"
         ],
         "description": "",
         "parameters": [],
