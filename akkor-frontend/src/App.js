@@ -4,7 +4,7 @@ import Register from './components/Register';
 import Homescreen from './components/Screen/Homescreen';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Login from './components/Login';
-import Hotel from './components/hotel';
+import Hotel from './components/Hotel';
 
 function App() {
   return (

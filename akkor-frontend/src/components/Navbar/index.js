@@ -10,7 +10,7 @@ function Navbar() {
             <span class="navbar-toggler-icon"></span>
           </button>
           <a class="brand" href="/home">
-            <img src={akkorhotel} width="40" alt="akkorhotel"/>
+            <img src={akkorhotel} width="40" image-align="center" alt="akkorhotel"/>
           </a>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
