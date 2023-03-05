@@ -9,7 +9,7 @@ before("Setting up DB connection", () => {
             
                 resolve()
             })
-        }, 500);
+        }, 1000);
     }
     );
 });
