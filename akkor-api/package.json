@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "test": "set NODE_ENV=test && mocha test/test.js --timeout 5000",
+    "test": "set NODE_ENV=test && NODE_ENV=test && mocha test/test.js --timeout 5000",
     "test-folder": "mocha './test/*.js'",
     "swagger-autogen": "node ./swagger/swagger.js"
   },
