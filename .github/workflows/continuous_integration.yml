@@ -15,8 +15,10 @@ jobs:
           node-version: 18.x
           cache: 'npm'
           cache-dependency-path: akkor-api/package-lock.json
-      - run: cd akkor-api
-      - run: ls
-      - run: npm install
-      - run: npm test
+      - run: |
+        cd akkor-api
+        npm install
+      - run: |
+        cd akkor-api
+        npm test
       
